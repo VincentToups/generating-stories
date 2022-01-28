@@ -4,7 +4,6 @@ from hashlib import md5 as hash_
 from time import sleep 
 import os
 import pandas as pd
-from dfply import *
 from random import randint
 import pickle
 
