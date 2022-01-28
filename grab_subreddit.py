@@ -1,7 +1,6 @@
 import web_util as w;
 import sys, argparse
 
-
 root = "https://teddit.net"
 
 def grab_page(page_url):
@@ -53,7 +52,7 @@ def grab_page_data(links, output_file):
                 f.write("\n");
                 print("{}".format(i));
                 i = i + 1;
-            except Error:
+            except:
                 print("Error for {}".format(l));
     print("Done!");
 
@@ -69,4 +68,5 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--subreddit');
     parser.add_argument('-n', '--n_pages', type=int, default=50);
     args = parser.parse_args()
+    lead = '/r/{}/comments'.format(args.subreddit)
     main(args)
