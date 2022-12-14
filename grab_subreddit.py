@@ -5,12 +5,16 @@ root = "https://teddit.net"
 
 def grab_page(page_url):
     bs = w.get_bs(page_url);
-    post_body = bs.find("div",class_="usertext-body").text;
+    post_body = bs.find("div",class_="usertext-body");
+    if post_body:
+        post_body_text = post_body.text;
+    else:
+        post_body_text = "";    
     title = bs.find("div",class_="title").find("a").text
     flair = [];
     for el in bs.find("div",class_="title").find_all("span",class_="flair"):
         flair = flair + [el.text];
-    return "::: " + title + " (" + ", ".join(flair) + ")" + " :::\n" + post_body;
+    return "::: " + title + " (" + ", ".join(flair) + ")" + " :::\n" + post_body_text + ":::\n";
 
 lead = '/r/AmItheAsshole/comments'
 def just_aita_links(bs):
@@ -40,20 +44,24 @@ def grab_top_links(start_url, pages, output = []):
         else:
             done = True;
         page = page + 1;
-    return list(set(output));
+    out = list(set(output));
+    out.sort();
+    return out;
 
 def grab_page_data(links, output_file):
     i = 0;
+    n = len(links);
     with open(output_file,"w") as f:
         for l in links:
             try:
                 data = grab_page(l);
                 f.write(data);
                 f.write("\n");
-                print("{}".format(i));
+                print("{} of {}".format(i,n));
                 i = i + 1;
-            except:
+            except Exception as e:
                 print("Error for {}".format(l));
+                print("Error was {}".format(e));
     print("Done!");
 
 #grab_page_data(grab_top_links("https://teddit.net/r/AmItheAsshole/top?t=all", 50), "aita.txt")
